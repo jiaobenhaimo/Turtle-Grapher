@@ -111,12 +111,14 @@ va.pensize(3)
 va.setpos(-300,0)
 
 t=1
+d=0
 
 # Start of Main Programme
-print("Turtle Mathematic Function Grapher \nVersion Beta 0.2 \n\nNote: \n\nList of supported functions, constants, and operations: \n+ : Plus\n- : Minus\n* : Time\n/ : Divide\n^ : Exponential\nsqrt() : Square Root\nTrigonometric Functions\ne : Eula's Constant\npi\n\nPlease strictly obey the format, otherwise problem would be encountered. \nSupported Range and Domain is [-12,12].\n\nPlease input the function: ")
+print("Turtle Mathematic Function Grapher \nVersion Beta 0.2 \n\nNote: \n\nList of supported functions, constants, and operations: \n+ : Plus\n- : Minus\n* : Time\n/ : Divide\n^ : Exponential\nTrigonometric Functions\ne : Eula's Constant\npi\n\' : Differentiation (Add Single Quotation Mark (\') at the end of the Function) \n\nPlease strictly obey the format, otherwise problem would be encountered. \nSupported Range and Domain is [-12,12].\n\nPlease input the function: ")
 
 va.speed(0)
 while t!=0:
+	d=0
 	x=-12.0
 	y=0.0
 	va.penup()
@@ -135,9 +137,10 @@ while t!=0:
 	a=a.replace("cot","math.cot")
 	a=a.replace("sec","math.sec")
 	a=a.replace("csc","math.csc")
-	a=a.replace("sqrt","math.sqrt")
 	a=a.replace("e^x","math.exp(x)")
-
+	if a.find("'")!=-1:
+		d=1
+		a=a.replace("'","")
 	if (t+6)%7==0: 
 		va.pencolor("Blue")
 	else:
@@ -160,17 +163,33 @@ while t!=0:
 								va.pencolor("DarkOrange2")
 	exec("y="+a)
 	va.setpos(x*25,y*25)
-	while x<=12:
-		exec("y="+a)
-		if (y<=-12 or y>=12) and va.isdown():
-			va.penup()
-			va.ht()
-		if (y>=-12 and y<=12) and not(va.isdown()):
-			va.pendown()
-			va.st()
-		draw(x,y)
-		x=x+0.04
-	
+	if d==1:
+		x=x-0.02
+		ad=a.replace("x","(x+0.04)")
+		while x<=12:
+			exec("y1="+a)
+			exec("y2="+ad)
+			yd=y2-y1
+			yd=yd/0.04
+			if (yd<=-12 or yd>=12) and va.isdown():
+				va.penup()
+				va.ht()
+			if (yd>=-12 and yd<=12) and not(va.isdown()):
+				va.pendown()
+				va.st()
+			draw(x+0.02,yd)
+			x=x+0.04
+	else:
+		while x<=12:
+			exec("y="+a)
+			if (y<=-12 or y>=12) and va.isdown():
+				va.penup()
+				va.ht()
+			if (y>=-12 and y<=12) and not(va.isdown()):
+				va.pendown()
+				va.st()
+			draw(x,y)
+			x=x+0.04
 	t=t+1
 
 
