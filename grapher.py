@@ -2,17 +2,69 @@ import turtle
 import os
 import math
 import string
+
 e=math.e
 pi=math.pi
+
+i=j=k=0
+
 # Initialize
 def draw(x,y):
 	va.setpos(x*25,y*25)
 
 os.system("clear")
+
 turtle.screensize(canvwidth=400, canvheight=400)
 ax=turtle.Turtle()
 ax.ht()
 ax.speed(0)
+ax.pencolor("Silver")
+ax.pensize(1)
+ax.penup()
+ax.setpos(-300,300)
+ax.pendown()
+ax.setpos(-300,300)
+ax.setpos(-300,-300)
+ax.setpos(300,-300)
+ax.setpos(300,300)
+ax.setpos(-300,300)
+for i in range(-300,0,50):
+	ax.penup()
+	ax.setpos(i,300)
+	ax.pendown()
+	ax.setpos(i,-300)
+	ax.penup()
+	ax.setpos(i+25,-300)
+	ax.pendown()
+	ax.setpos(i+25,300)
+for i in range(25,300,50):
+	ax.penup()
+	ax.setpos(i,300)
+	ax.pendown()
+	ax.setpos(i,-300)
+	ax.penup()
+	ax.setpos(i+25,-300)
+	ax.pendown()
+	ax.setpos(i+25,300)
+for i in range(-300,0,50):
+	ax.penup()
+	ax.setpos(300,i)
+	ax.pendown()
+	ax.setpos(-300,i)
+	ax.penup()
+	ax.setpos(-300,i+25)
+	ax.pendown()
+	ax.setpos(300,i+25)
+for i in range(25,300,50):
+	ax.penup()
+	ax.setpos(300,i)
+	ax.pendown()
+	ax.setpos(-300,i)
+	ax.penup()
+	ax.setpos(-300,i+25)
+	ax.pendown()
+	ax.setpos(300,i+25)
+ax.pencolor("Black")
 ax.pensize(4)
 ax.penup()
 ax.setpos(-300,0)
@@ -32,26 +84,47 @@ ax.penup()
 ax.setpos(10,290)
 ax.pendown()
 ax.setpos(0,300)
+ax.penup()
+ax.setpos(24,-9)
+ax.pensize(2)
+ax.pendown()
+ax.setpos(26,-7)
+ax.setpos(26,-19)
+ax.penup()
+ax.setpos(24,-19)
+ax.pendown()
+ax.setpos(28,-19)
+ax.penup()
+ax.setpos(-13,29)
+ax.pendown()
+ax.setpos(-11,31)
+ax.setpos(-11,19)
+ax.penup()
+ax.setpos(-13,19)
+ax.pendown()
+ax.setpos(-9,19)
+
 va=turtle.Turtle()
+va.ht()
 va.penup()
 va.pensize(3)
 va.setpos(-300,0)
+
 t=1
-i=j=k=0
-o=0
 
 # Start of Main Programme
-print("Turtle Mathematic Function Grapher \nVer Beta 0.1 \nNote: \nList of supported functions, constants, and operations: \n+ : Plus\n- : Minus\n* : Time\n/ : Divide\n^ : Exponential\nTrigonometric Functions\ne : Eula's Constant\npi\n\nPlease strictly obey the format, otherwise problem would be encountered. \nSupported Range and Domain is [-12,12].\nPlease input the function: ")
+print("Turtle Mathematic Function Grapher \nVersion Beta 0.2 \n\nNote: \n\nList of supported functions, constants, and operations: \n+ : Plus\n- : Minus\n* : Time\n/ : Divide\n^ : Exponential\nsqrt() : Square Root\nTrigonometric Functions\ne : Eula's Constant\npi\n\nPlease strictly obey the format, otherwise problem would be encountered. \nSupported Range and Domain is [-12,12].\n\nPlease input the function: ")
 
 va.speed(0)
 while t!=0:
 	x=-12.0
 	y=0.0
 	va.penup()
+	va.ht()
 	va.pensize(3)
 	va.setpos(-300,0)
 	va.penup()
-	a=input("\nf"+str(t)+"(x)=")
+	a=input("f"+str(t)+"(x)=")
 	if a.find("=")!=-1:
 		print("An error occured. ")
 		break
@@ -62,6 +135,7 @@ while t!=0:
 	a=a.replace("cot","math.cot")
 	a=a.replace("sec","math.sec")
 	a=a.replace("csc","math.csc")
+	a=a.replace("sqrt","math.sqrt")
 	a=a.replace("e^x","math.exp(x)")
 
 	if (t+6)%7==0: 
@@ -88,9 +162,13 @@ while t!=0:
 	va.setpos(x*25,y*25)
 	while x<=12:
 		exec("y="+a)
-		va.pendown()
-		if y>=-12 and y<=12:
-			draw(x,y)
+		if (y<=-12 or y>=12) and va.isdown():
+			va.penup()
+			va.ht()
+		if (y>=-12 and y<=12) and not(va.isdown()):
+			va.pendown()
+			va.st()
+		draw(x,y)
 		x=x+0.04
 	
 	t=t+1
