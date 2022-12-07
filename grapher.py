@@ -2,9 +2,7 @@ import turtle
 import os
 import math
 import string
-
-e=math.e
-pi=math.pi
+import constant
 
 i=j=k=0
 
@@ -14,6 +12,7 @@ def draw(x,y):
 
 os.system("clear")
 
+# Frame
 turtle.screensize(canvwidth=400, canvheight=400)
 ax=turtle.Turtle()
 ax.ht()
@@ -114,7 +113,7 @@ t=1
 d=0
 
 # Start of Main Programme
-print("Turtle Mathematic Function Grapher \nVersion Beta 0.2 \n\nNote: \n\nList of supported functions, constants, and operations: \n+ : Plus\n- : Minus\n* : Time\n/ : Divide\n^ : Exponential\nTrigonometric Functions\ne : Eula's Constant\npi\n\' : Differentiation (Add Single Quotation Mark (\') at the end of the Function) \n\nPlease strictly obey the format, otherwise problem would be encountered. \nSupported Range and Domain is [-12,12].\n\nPlease input the function: ")
+print("Turtle Mathematic Function Grapher \nVersion Beta 0.2 \n\nPlease strictly obey the format, otherwise problem would be encountered. \nSupported Range and Domain is [-12,12].\n\"Input \"quit\" to quit, input \"help\" for help. \n\nPlease input the function: ")
 
 va.speed(0)
 while t!=0:
@@ -127,9 +126,16 @@ while t!=0:
 	va.setpos(-300,0)
 	va.penup()
 	a=input("f"+str(t)+"(x)=")
+	if a.find("quit")!=-1:
+		os.system("clear")
+		break
+	if a.find("help")!=-1:
+		print("Note for Using \n\nList of supported functions, constants, and operations: \n+ : Plus\n- : Minus\n* : Time\n/ : Divide\n^ : Exponential\nTrigonometric Functions\ne : Eula's Constant\npi\nDifferentiation (Add Single Quotation Mark (\') at the end of the Function) \nAnti-Differentiation(Integration with f(0)=0)(Add \"int \" at the start of the Function)\n")
+		break
 	if a.find("=")!=-1:
 		print("An error occured. ")
 		break
+	# Replace function in string
 	a=a.replace("^","**")
 	a=a.replace("sin","math.sin")
 	a=a.replace("cos","math.cos")
@@ -141,6 +147,10 @@ while t!=0:
 	if a.find("'")!=-1:
 		d=1
 		a=a.replace("'","")
+	if a.find("int ")!=-1:
+		d=2
+		a=a.replace("int ","")
+	# Coloring
 	if (t+6)%7==0: 
 		va.pencolor("Blue")
 	else:
@@ -160,12 +170,17 @@ while t!=0:
 							va.pencolor("Orange")
 						else: 
 							if t%8==0:
-								va.pencolor("DarkOrange2")
-	exec("y="+a)
-	va.setpos(x*25,y*25)
+								va.pencolor("Sienna")
 	if d==1:
 		x=x-0.02
 		ad=a.replace("x","(x+0.04)")
+		exec("y1="+a)
+		exec("y2="+ad)
+		yd=y2-y1
+		yd=yd/0.04
+		va.penup()
+		draw(-12,yd)
+		va.pendown()
 		while x<=12:
 			exec("y1="+a)
 			exec("y2="+ad)
@@ -180,16 +195,62 @@ while t!=0:
 			draw(x+0.02,yd)
 			x=x+0.04
 	else:
-		while x<=12:
+		if d==2:
+			va.penup()
+			va.setpos(0,0)
+			x=0
+			sd=0
+			ad=a.replace("x","(x+0.0005)")
+			while x<=12:
+				for i in range(0,80):
+					exec("y1="+a)
+					exec("y2="+ad)
+					yd=y1+y2
+					yd=yd*0.0005/2
+					sd+=yd
+					x=x+0.0005
+				if (sd<=-12 or sd>=12) and va.isdown():
+					va.penup()
+					va.ht()
+				if (sd>=-12 and sd<=12) and not(va.isdown()):
+					va.pendown()
+					va.st()
+				draw(x,sd)
+			va.penup()
+			va.setpos(0,0)
+			va.pendown()
+			ad=a.replace("x","(x-0.0005)")
+			x=0
+			sd=0
+			while x>=-12:
+				for i in range(0,80):
+					exec("y1="+a)
+					exec("y2="+ad)
+					yd=y1+y2
+					yd=yd*0.0005/2
+					sd-=yd
+					x=x-0.0005
+				if (sd<=-12 or sd>=12) and va.isdown():
+					va.penup()
+					va.ht()
+				if (sd>=-12 and sd<=12) and not(va.isdown()):
+					va.pendown()
+					va.st()
+				draw(x,sd)
+		else:
 			exec("y="+a)
-			if (y<=-12 or y>=12) and va.isdown():
-				va.penup()
-				va.ht()
-			if (y>=-12 and y<=12) and not(va.isdown()):
-				va.pendown()
-				va.st()
-			draw(x,y)
-			x=x+0.04
+			va.penup()
+			draw(-12,y)
+			while x<=12:
+				exec("y="+a)
+				if (y<=-12 or y>=12) and va.isdown():
+					va.penup()
+					va.ht()
+				if (y>=-12 and y<=12) and not(va.isdown()):
+					va.pendown()
+					va.st()
+				draw(x,y)
+				x=x+0.04
 	t=t+1
 
 
